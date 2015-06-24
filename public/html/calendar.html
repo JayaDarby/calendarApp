@@ -3,6 +3,7 @@
 	<head>
 		<!-- jQuery and Moment must be loaded before FullCalendar's Javascript. Additional dependencies may be needed for dragging and resizing -->
 		<link rel='stylesheet' href='../css/fullcalendar.css' />
+		<link rel="stylesheet" type="text/css" href="../css/jquery-ui.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script src='../js/moment.js'></script>
 		<script src='../js/fullcalendar.js'></script>
@@ -11,12 +12,18 @@
 		    // page is now ready, initialize the calendar...		
 		    $('#calendar').fullCalendar({
 		        // put your options and callbacks here
+		        header: {
+		        	left: 'today prev,next prevYear,nextYear',
+				    center: 'title',
+				    right: 'month,basicWeek,basicDay'
+		        },
+		        theme:true,
 		    });		
 		});
-		</script>
-
+        </script>
 	</head>
 	<body>
 		<div id='calendar'></div>
+
 	</body>
 </html>
