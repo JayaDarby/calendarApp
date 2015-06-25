@@ -1,0 +1,38 @@
+<% include ../partials/header %>
+<h1>Edit an Event</h1>
+<a href="/events">See all of your events</a>
+
+<form action="/events" method="POST">
+  <div class="form-group">
+    <label for="title">Name of Event: </label>
+    <input type="text" class="form-control" name="event[title]" id="title" autofocus>
+  </div>
+  <div class="form-group">
+    <label for="allDay">Is this event all day? </label><br>
+    <input type="radio" class="form-control" name="event[allDay]" id="allDay" value='No'>No<br>
+    <input type="radio" class="form-control" name="event[allDay]" id="allDay2" value='Yes'>Yes<br>
+  </div>
+    <div class="form-group">
+    <label for="startDate">Starting Date: </label>
+    <input type="date" class="form-control" name="event[startDate]" id="startDate">
+  </div>
+    <div class="form-group">
+    <label for="endDate">Ending Date: </label>
+    <input type="date" class="form-control" name="event[endDate]" id="endDate">
+  </div>
+  <div class="form-group">
+    <label for="startTime">Starting Time: </label>
+    <input type="time" class="form-control" name="event[startTime]" id="startTime">
+  </div>
+   <div class="form-group">
+    <label for="endTime">Ending Time: </label>
+    <input type="time" class="form-control" name="event[endTime]" id="endTime">
+  </div>
+  <div class="form-group">
+    <label for="url">Event URL: </label>
+    <input type="url" class="form-control" name="event[url]" id="url">
+  </div>
+  <input type="submit" value="Add" class="btn btn-lg btn-success">
+</form>
+
+<% include ../partials/footer %>
