@@ -5,8 +5,8 @@ var express = require('express'),
     methodOverride = require('method-override'),
     session = require("cookie-session"),
     db = require('./models');
-    loginMiddleware = require("./middleware/loginHelper");
-    routeMiddleware = require("./middleware/routeHelper");
+    loginMiddleware = require("./middleware/login");
+    routeMiddleware = require("./middleware/route");
 
 app.set('view engine', 'ejs');
 app.use(morgan('tiny'));
@@ -21,3 +21,16 @@ app.use(session({
 }));
 
 app.use(loginMiddleware);
+
+//ROOT
+app.get('/', function(req,res){
+  res.render('users/index');
+});
+
+
+
+
+//SERVER
+app.listen(3000, function(){
+  console.log("Server is listening on port 3000");
+});
