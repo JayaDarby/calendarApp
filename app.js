@@ -28,6 +28,56 @@ app.get('/', function(req,res){
 });
 
 
+app.get('/signup', routeMiddleware.preventLoginSignup ,function(req,res){
+  res.render('users/signup');
+});
+
+app.post("/signup", function (req, res) {
+  var newUser = req.body.user;
+  db.User.create(newUser, function (err, user) {
+    if (user) {
+      req.login(user);
+      res.redirect("/events");
+    } else {
+      console.log(err);
+      // TODO - handle errors in ejs!
+      res.render("users/signup");
+    }
+  });
+});
+
+
+app.get("/login", routeMiddleware.preventLoginSignup, function (req, res) {
+  res.render("users/login");
+});
+
+app.post("/login", function (req, res) {
+  db.User.authenticate(req.body.user,
+  function (err, user) {
+    if (!err && user !== null) {
+      req.login(user);
+      res.redirect("/events");
+    } else {
+      // TODO - handle errors in ejs!
+      res.render("users/login");
+    }
+  });
+});
+
+app.get('/events', routeMiddleware.ensureLoggedIn, function(req,res){
+      res.render("events/index");
+});
+
+
+
+app.get("/logout", function (req, res) {
+  req.logout();
+  res.redirect("/");
+});
+
+app.get('*', function(req,res){
+  res.render('errors/404');
+});
 
 
 //SERVER
