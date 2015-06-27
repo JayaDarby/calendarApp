@@ -1,6 +1,5 @@
 <% include ../partials/header %>
 <h1>Add a New Event</h1>
-<a href="/events">See all of your events</a>
 
 <form action="/events" method="POST">
   <div class="form-group">
@@ -13,20 +12,11 @@
     <input type="radio" class="form-control" name="event[allDay]" id="allDay2" value='Yes'>Yes<br>
   </div>
     <div class="form-group">
-    <label for="startDate">Starting Date: </label>
-    <input type="date" class="form-control" name="event[startDate]" id="startDate">
-  </div>
-    <div class="form-group">
-    <label for="endDate">Ending Date: </label>
-    <input type="date" class="form-control" name="event[endDate]" id="endDate">
-  </div>
-  <div class="form-group">
-    <label for="startTime">Starting Time: </label>
-    <input type="time" class="form-control" name="event[startTime]" id="startTime">
-  </div>
+    <label for="startDate">Start: </label>
+    <input type="datetime-local" class="form-control" name="event[start]" id="startDate">
    <div class="form-group">
-    <label for="endTime">Ending Time: </label>
-    <input type="time" class="form-control" name="event[endTime]" id="endTime">
+    <label for="endTime">End: </label>
+    <input type="datetime-local" class="form-control" name="event[end]" id="endTime">
   </div>
   <div class="form-group">
     <label for="url">Event URL: </label>

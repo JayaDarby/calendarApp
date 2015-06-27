@@ -4,9 +4,11 @@ var express = require('express'),
     morgan = require('morgan'),
     methodOverride = require('method-override'),
     session = require("cookie-session"),
+    jquery = require('jquery'),
     db = require('./models');
     loginMiddleware = require("./middleware/login");
     routeMiddleware = require("./middleware/route");
+
 
 app.set('view engine', 'ejs');
 app.use(morgan('tiny'));
@@ -91,14 +93,14 @@ app.get("/logout", function (req, res) {
 //if the user is logged in (this is done by routeMiddleware.ensureLiggedIn), then render
 //the layout page which displays the calendar with all events listed.
 app.get('/calendar', routeMiddleware.ensureLoggedIn, function(req,res){
-    // db.Event.find({user:req.session.id}).populate('user').exec(function(err, events){
-    //   if(err){
-    //     console.log(err);
-    //   }
-    //   else{
-        res.render('layout'/*, {events:events}*/);
-     // }
-   // });
+    db.Event.find({user:req.session.id}).populate('user').exec(function(err, events){
+      if(err){
+        console.log(err);
+      }
+      else{
+        res.render('layout', {theEvents:events});
+     }
+   });
 });
 
 
@@ -118,29 +120,39 @@ app.get('/calendar', routeMiddleware.ensureLoggedIn, function(req,res){
 //   });
 // });
 
-
+//GET NEW EVENT PAGE
+//once user clicks the 'add a new event' link, render a form to get the information for the
+//new event. Also send an object that contains the user's session id.
 app.get('/events/new', routeMiddleware.ensureLoggedIn, function(req,res){
   res.render('events/new', {author_id:req.session.id});
 })
 
 
-
-
+//CREATE A NEW EVENT
 app.post('/events', routeMiddleware.ensureLoggedIn, function(req,res){
-  var event = new db.Event
+  var event = req.body.event;
+  console.log(event);
+  db.Event.create(event, function(err, ev){
+    if(err){
+      console.log(err);
+      res.render('/events/new');
+    }
+    else {
+      res.redirect('/calendar');
+    }
+  });
 });
 
 
+//SHOW ALL EVENTS
+app.get('/events/:id', function(req,res){
+  db.Event.findById(req.param.id).populate('user').exec(
+    function(err, event){
+      res.render('/event/show', {event:event});
+    });
+});
 
 
-
-
-
-
-
-// app.get('*', function(req,res){
-//   res.render('errors/404');
-// });
 
 
 //SERVER

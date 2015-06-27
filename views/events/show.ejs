@@ -1,0 +1,10 @@
+<%= include ../partials/header %>
+<h1><%= event.title %></h1>
+<div>Is this event all day? <%= event.allDay %></div>
+<div>Event starts at: <%= event.start %></div>
+<div>Event ends at: <%= event.end %></div>
+<div><a href='<%=event.url %>'>Event Link </a></div><br>
+<a href="/events/<%=event._id%>/edit">Edit this Event</a>
+<a href="/calendar">Back to the Calendar</a>
+<%= include ../partials/footer %>
+
