@@ -89,7 +89,7 @@ app.get("/logout", function (req, res) {
 
 /******* EVENT ROUTES *******/
 
-
+//CALENDAR
 //if the user is logged in (this is done by routeMiddleware.ensureLiggedIn), then render
 //the layout page which displays the calendar with all events listed.
 app.get('/calendar', routeMiddleware.ensureLoggedIn, function(req,res){
@@ -104,21 +104,19 @@ app.get('/calendar', routeMiddleware.ensureLoggedIn, function(req,res){
 });
 
 
-// app.get('/posts', function(req,res) {
-//   db.Post.find({}).populate('author', 'username').exec(function(err, posts) {
-//     if (err) {
-//       console.log(err);
-//     } else {
-//       if(req.session.id == null){
-//         res.render('posts/index', {posts: posts, currentuser: ""});
-//       } else {
-//         db.User.findById(req.session.id, function(err,user){
-//           res.render('posts/index', {posts: posts, currentuser: user.username});
-//         })
-//       }
-//     }
-//   });
-// });
+//INDEX (SHOW ALL OF THE USER'S CREATED EVENTS)
+app.get('/events', routeMiddleware.ensureLoggedIn, function(req,res){
+    db.Event.find({user:req.session.id}).populate('user').exec(function(err, events){
+      if(err){
+        console.log(err);
+      }
+      else{
+        res.render('/events/index', {theEvents:events});
+      }
+   });
+});
+
+
 
 //GET NEW EVENT PAGE
 //once user clicks the 'add a new event' link, render a form to get the information for the
@@ -144,8 +142,10 @@ app.post('/events', routeMiddleware.ensureLoggedIn, function(req,res){
 });
 
 
-//SHOW ALL EVENTS
-app.get('/events/:id', function(req,res){
+
+
+//SHOW AN EVENT
+app.get('/events/:id', routeMiddleware.ensureLoggedIn, function(req,res){
   db.Event.findById(req.param.id).populate('user').exec(
     function(err, event){
       res.render('/event/show', {event:event});
