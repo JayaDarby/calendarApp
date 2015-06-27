@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var SALT_FACTOR = 10;
 
+mongoose.set('debug', true);
 
 var userSchema = new mongoose.Schema({
 	email:{

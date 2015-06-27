@@ -25,3 +25,6 @@ var eventSchema = new mongoose.Schema({
 		ref: "User"
 	}
 });
+
+var Event = mongoose.model('Event', eventSchema);
+module.exports = Event;
