@@ -91,14 +91,14 @@ app.get("/logout", function (req, res) {
 //if the user is logged in (this is done by routeMiddleware.ensureLiggedIn), then render
 //the layout page which displays the calendar with all events listed.
 app.get('/calendar', routeMiddleware.ensureLoggedIn, function(req,res){
-    db.Event.find({user:req.session.id}).populate('user').exec(function(err, events){
-      if(err){
-        console.log(err);
-      }
-      else{
-        res.render('/layout', {events:events})
-      }
-    });
+    // db.Event.find({user:req.session.id}).populate('user').exec(function(err, events){
+    //   if(err){
+    //     console.log(err);
+    //   }
+    //   else{
+        res.render('layout'/*, {events:events}*/);
+     // }
+   // });
 });
 
 
@@ -119,25 +119,34 @@ app.get('/calendar', routeMiddleware.ensureLoggedIn, function(req,res){
 // });
 
 
-
-app.post('/events', routeMiddleware.ensureLoggedIn, function(req,res){
-  var event = new db.Event
+app.get('/events/new', routeMiddleware.ensureLoggedIn, function(req,res){
+  res.render('events/new', {author_id:req.session.id});
 })
 
 
 
 
-
-
-
-
-
-app.get('*', function(req,res){
-  res.render('errors/404');
+app.post('/events', routeMiddleware.ensureLoggedIn, function(req,res){
+  var event = new db.Event
 });
+
+
+
+
+
+
+
+
+
+// app.get('*', function(req,res){
+//   res.render('errors/404');
+// });
 
 
 //SERVER
 app.listen(3000, function(){
   console.log("Server is listening on port 3000");
 });
+
+
+
