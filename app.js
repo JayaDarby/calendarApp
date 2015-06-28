@@ -111,7 +111,7 @@ app.get('/events', routeMiddleware.ensureLoggedIn, function(req,res){
         console.log(err);
       }
       else{
-        res.render('/events/index', {theEvents:events});
+        res.render('events/index', {theEvents:events});
       }
    });
 });
@@ -143,12 +143,12 @@ app.post('/events', routeMiddleware.ensureLoggedIn, function(req,res){
 
 
 
-
 //SHOW AN EVENT
 app.get('/events/:id', routeMiddleware.ensureLoggedIn, function(req,res){
-  db.Event.findById(req.param.id).populate('user').exec(
+  db.Event.findById(req.params.id).populate('user').exec(
     function(err, event){
-      res.render('/event/show', {event:event});
+      console.log(event);
+      res.render('events/show', {event:event});
     });
 });
 

@@ -1,10 +1,38 @@
 <%= include ../partials/header %>
 <h1><%= event.title %></h1>
-<div>Is this event all day? <%= event.allDay %></div>
-<div>Event starts at: <%= event.start %></div>
-<div>Event ends at: <%= event.end %></div>
-<div><a href='<%=event.url %>'>Event Link </a></div><br>
-<a href="/events/<%=event._id%>/edit">Edit this Event</a>
-<a href="/calendar">Back to the Calendar</a>
-<%= include ../partials/footer %>
 
+<table cellspacing="10">
+	<thead>
+		<tr>
+			<th>Name of Event</th>
+			<th>All Day?</th>
+		    <th>Starting Time</th>
+		    <th>Ending Time</th>
+		    <th>Event Link</th>
+		    <th>Edit</th>
+		    <th>Delete</th>
+		</tr>
+	</thead>
+ 	 <tbody>
+ 	     <tr>
+ 	     	<td><a href="/events/<%= event._id%>"><%= event.title%></a></td>
+ 	     	<td><%= event.allDay%></td>
+ 	     	<td><%= event.start%></td>
+ 	     	<td><%= event.end%></td>
+ 	     	<td><a href='<%= event.url%>'><%= event.url%></a></td>
+ 	     	<td><a href="/events/<%= event._id%>/edit">Edit</a></td>
+ 	     	<td>
+ 	     	  <form action='/events/<%= event._id %>?_method=DELETE' method="POST">
+ 	     	    <input type="submit" value="X">
+ 	     	  </form>
+ 	     	</td>
+ 	     </tr>
+ 	 </tbody>
+</table>
+<br>
+<a href="/events/<%=event._id%>/edit">Edit this Event</a><br>
+<a href="/calendar">Back to the Calendar</a><br>
+<a href="/events/new">Add a New Event</a><br>
+<br>
+<a href="/logout">Logout</a>
+<% include ../partials/footer %>
