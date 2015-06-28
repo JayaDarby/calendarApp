@@ -22,6 +22,7 @@ app.use(session({
   name: "gibberish"
 }));
 
+
 app.use(loginMiddleware);
 
 
@@ -151,6 +152,52 @@ app.get('/events/:id', routeMiddleware.ensureLoggedIn, function(req,res){
       res.render('events/show', {event:event});
     });
 });
+
+
+//EDIT AN EVENT
+app.get('/events/:id/edit', routeMiddleware.ensureLoggedIn, function(req,res){
+  db.Event.findById(req.params.id, function(err, event){
+    if(err){
+      console.log(err);
+    }
+    else {
+      res.render('events/edit', {event:event,
+                                 author_id:req.session.id});
+    }
+  });
+});
+
+
+//UPDATE AN EVENT
+app.put('/events/:id', routeMiddleware.ensureLoggedIn, function(req,res){
+  var show_page = '/events/' + req.params.id;
+  db.Event.findByIdAndUpdate(req.params.id, req.body.event, function(err, event){
+    if(err){
+      console.log(err);
+      res.render('events/edit');
+    }
+    else {
+      console.log(req.body.event);
+      res.redirect(show_page);
+    }
+  });
+});
+
+
+
+//DESTROY AN EVENT
+app.delete('/events/:id',routeMiddleware.ensureLoggedIn, function(req,res){
+  db.Event.findById(req.params.id, function(err, event){
+    if (err) {
+      console.log(err)
+      res.render('events/show');
+    } else {
+      event.remove();
+      res.redirect('/events');
+    }
+  });
+});
+
 
 
 
