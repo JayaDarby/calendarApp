@@ -91,7 +91,7 @@ app.get("/logout", function (req, res) {
 /******* EVENT ROUTES *******/
 
 //CALENDAR
-//if the user is logged in (this is done by routeMiddleware.ensureLiggedIn), then render
+//if the user is logged in (this is done by routeMiddleware.ensureLoggedIn), then render
 //the layout page which displays the calendar with all events listed.
 app.get('/calendar', routeMiddleware.ensureLoggedIn, function(req,res){
     db.Event.find({user:req.session.id}).populate('user').exec(function(err, events){
@@ -211,11 +211,11 @@ app.delete('/events/:id',routeMiddleware.ensureLoggedIn, function(req,res){
 });
 
 
-
-
+//LISTEN TO THE HEROKU APP
+// app.listen(process.env.PORT || 3000);
 
 //SERVER
-app.listen(3000, function(){
+app.listen(process.env.PORT || 3000, function(){
   console.log("Server is listening on port 3000");
 });
 
