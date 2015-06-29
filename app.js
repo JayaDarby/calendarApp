@@ -112,7 +112,19 @@ app.get('/events', routeMiddleware.ensureLoggedIn, function(req,res){
         console.log(err);
       }
       else{
-        res.render('events/index', {theEvents:events});
+        res.format({
+          'text/html': function(){
+            res.render("events/index", {theEvents: events});
+          },
+    
+          'application/json': function(){
+            res.send({ events: events });
+          },
+          'default': function() {
+            // log the request and respond with 406
+            res.status(406).send('Not Acceptable');
+          }
+        });
       }
    });
 });
