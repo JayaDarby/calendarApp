@@ -6,11 +6,16 @@ var express = require('express'),
     session = require("cookie-session"),
     jquery = require('jquery'),
     request = require('request'),
-    OAuth = require('oauth').OAuth,
-    querystring = require('querystring');
+    passport = require('passport'),
+    util = require('util'),
+    MeetupStrategy = require('passport-meetup').Strategy;
     db = require('./models');
     loginMiddleware = require("./middleware/login");
     routeMiddleware = require("./middleware/route");
+
+
+var MEETUP_KEY = 'psnnhjuq85ps4olm79uia7j908';
+var MEETUP_SECRET = 'e5gdob0s5ludcqn3f1ca7fon8p';
 
 
 app.set('view engine', 'ejs');
@@ -18,21 +23,98 @@ app.use(morgan('tiny'));
 app.use(methodOverride('_method'));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(loginMiddleware);
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.use(session({
   maxAge: 3600000,
-  secret: 'lkjhgfdsa',
-  name: "gibberish"
+  secret: 'kittystuff',
+  name: "meow",
+  cookie: { secure: true }
 }));
 
 
-app.use(loginMiddleware);
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
 
 
-//ROOT
+passport.use(new MeetupStrategy({
+    consumerKey: MEETUP_KEY,
+    consumerSecret: MEETUP_SECRET,
+    callbackURL: "http://127.0.0.1:3000/auth/meetup/callback"
+  },
+  function(token, tokenSecret, profile, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
+      
+      // To keep the example simple, the user's Meetup profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Meetup account with a user record in your database,
+      // and return that user instead.
+      return done(null, profile);
+    });
+  }
+));
+
+
+//ROOT login to MY APP
 //renders the page that allows the user to either login or signup
 app.get('/', function(req,res){
   res.render('users/index');
+});
+
+
+app.get('/account', function(req, res){
+  res.render('meetup/account', { user: req.user });
+});
+
+
+app.get('/meetup/login', function(req, res){
+  res.render('meetup/login', { user: req.user });
+});
+
+
+app.get('/auth/meetup',
+  passport.authenticate('meetup'),
+  function(req, res){
+    // The request will be redirected to Meetup for authentication, so this
+    // function will not be called.
+});
+
+
+
+app.get('/auth/meetup/callback', 
+passport.authenticate('meetup', { failureRedirect: '/meetup/login' }),
+function(req, res) {
+  res.redirect('/calendar');
+});
+
+
+app.get('/searchresults', function(req, res) {
+  var url = 'https://api.meetup.com/2/events?key=ABDE12456AB2324445&group_urlname=ny-tech&sign=true';
+  console.log(url);
+  request.get(url, function(error, response, body) {
+    if (error) {
+      console.log('error!');
+    } else if (!error && response.statusCode != 200) {
+      console.log('error!');
+    } else if (!error && response.statusCode === 200) {
+      res.send(body);
+      //res.send('searchresults', JSON.parse(body));
+    } else {
+      console.log('error!');
+    }
+    
+  });
+  
 });
 
 
@@ -102,10 +184,12 @@ app.get('/calendar', routeMiddleware.ensureLoggedIn, function(req,res){
         console.log(err);
       }
       else{
-        res.render('layout', {theEvents:events});
+        res.render('layout', {theEvents:events,
+                              user:req.user});
      }
    });
 });
+
 
 
 //INDEX (SHOW ALL OF THE USER'S CREATED EVENTS)
@@ -223,3 +307,7 @@ app.listen(process.env.PORT || 3000);
 
 
 
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/calendar')
+}
