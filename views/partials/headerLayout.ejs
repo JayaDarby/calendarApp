@@ -2,11 +2,11 @@
 <html>
 	<head>
 		<!-- jQuery and Moment must be loaded before FullCalendar's Javascript. Additional dependencies may be needed for dragging and resizing -->
-		<link rel='stylesheet' href='../css/fullcalendar.css' />
-		<link rel="stylesheet" type="text/css" href="../css/jquery-ui.css">
+		<link rel='stylesheet' href='/css/fullcalendar.css' />
+		<link rel="stylesheet" type="text/css" href="/css/jquery-ui.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-		<script src='../js/moment.js'></script>
-		<script src='../js/fullcalendar.js'></script>
+		<script src='/js/moment.js'></script>
+		<script src='/js/fullcalendar.js'></script>
 		<script type="text/javascript" src="/js/events.js"></script>
 		<script>
 		    $(document).ready(function() {
@@ -30,6 +30,7 @@
    			         allDay: false,
    			         start:  '2015-06-29T14:30:00',
    			         end: '2015-06-24T15:30:00',
+   			         description:'adding some description to test',
    			         url: 'https://en.wikipedia.org/?title=Surrealism',
    			     },
    			     {
@@ -37,11 +38,29 @@
    			         allDay: false,
    			         start:  '2015-06-29T15:15:00',
    			         end: '2015-06-24T15:30:00',
+   			         description:'adding some description to test. arghoaerhgoeurhgpoas aeurhaoeurh gaor gaoer gpaeorh goaehr gaieurhg . airguhapeirg oaeru g[ar gar g[rau g[aer g.',
    			         url: 'https://en.wikipedia.org/?title=Surrealism',
    			     }
    			     // other events here...
    			    ],
 
+   			    eventClick: function(event) {
+    			    if (event.url) {
+    			    	setTimeout(function(){window.location.href = "/events/"+event._id;},300);
+    			        return false;
+    			    }
+    			    else {
+    			    	window.location.href = "/events/"+event._id;
+    			    }
+
+    			},
+    			eventRender: function(event, element) { 
+            		element.find('.fc-title').append("<br/>" + event.description);
+            		element.bind('dblclick', function() {
+        			  window.location.href = event.url;
+     				});
+        		},
+      	
 		    });		
 		});
         </script>

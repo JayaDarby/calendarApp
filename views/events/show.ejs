@@ -9,6 +9,7 @@
 		    <th>Starting Time</th>
 		    <th>Ending Time</th>
 		    <th>Event Link</th>
+		    <th width='200'>Description</th>
 		    <th>Edit</th>
 		    <th>Delete</th>
 		</tr>
@@ -20,6 +21,7 @@
  	     	<td><%= event.start%></td>
  	     	<td><%= event.end%></td>
  	     	<td><a href='<%= event.url%>'><%= event.url%></a></td>
+ 	     	<td width='200'><%= event.description%></td>
  	     	<td><a href="/events/<%= event._id%>/edit">Edit</a></td>
  	     	<td>
  	     	  <form action='/events/<%= event._id %>?_method=DELETE' method="POST">

@@ -5,6 +5,9 @@ var express = require('express'),
     methodOverride = require('method-override'),
     session = require("cookie-session"),
     jquery = require('jquery'),
+    request = require('request'),
+    OAuth = require('oauth').OAuth,
+    querystring = require('querystring');
     db = require('./models');
     loginMiddleware = require("./middleware/login");
     routeMiddleware = require("./middleware/route");
@@ -142,6 +145,7 @@ app.get('/events/new', routeMiddleware.ensureLoggedIn, function(req,res){
 //CREATE A NEW EVENT
 app.post('/events', routeMiddleware.ensureLoggedIn, function(req,res){
   var event = req.body.event;
+  console.log(event.description);
   console.log(event);
   db.Event.create(event, function(err, ev){
     if(err){
@@ -215,9 +219,7 @@ app.delete('/events/:id',routeMiddleware.ensureLoggedIn, function(req,res){
 // app.listen(process.env.PORT || 3000);
 
 //SERVER
-app.listen(process.env.PORT || 3000, function(){
-  console.log("Server is listening on port 3000");
-});
+app.listen(process.env.PORT || 3000);
 
 
 

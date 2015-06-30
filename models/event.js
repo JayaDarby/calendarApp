@@ -20,6 +20,9 @@ var eventSchema = new mongoose.Schema({
 	url: {
 		type: String
 	},
+	description: {
+		type: String
+	},
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User"
