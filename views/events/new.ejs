@@ -1,39 +1,40 @@
 <% include ../partials/header %>
+
+<div class='container' id='container'>
 <h1>Add a New Event</h1>
-
-
 <form action="/events" method="POST">
   <div class="form-group">
-    <label for="title" class='label'>Name of Event: </label>
+    <label for="title" class='.form-group'><span class='star'>*</span>Name of Event: </label>
     <input type="text" class="form-control" name="event[title]" id="title" autofocus>
   </div>
   <div class="form-group">
-    <label for="allDay">Is this event all day? </label><br>
-    <input type="radio" class="form-control" name="event[allDay]" id="allDay" value='No'>No<br>
+    <label for="allDay .form-group">Is this event all day? </label><br>
+<!--     <input type="radio" class="form-control" name="event[allDay]" id="allDay" value='No'>No<br> -->
     <input type="radio" class="form-control" name="event[allDay]" id="allDay2" value='Yes'>Yes<br>
   </div>
     <div class="form-group">
-    <label for="startDate" class='label'>Start: </label>
+    <label for="startDate" class='.form-group'><span class='star'>*</span>Start: </label>
     <input type="datetime-local" class="form-control" name="event[start]" id="startDate">
    <div class="form-group">
-    <label for="endTime">End: </label>
+    <label for="endTime" .form-group>End: </label>
     <input type="datetime-local" class="form-control" name="event[end]" id="endTime">
   </div>
   <div class="form-group">
-    <label for="url">Event URL: </label>
+    <label for="url" .form-group>Event URL: </label>
     <input type="url" class="form-control" name="event[url]" id="url">
   </div>
   <div class="form-group">
-    <label for="description">Description: </label><br>
+    <label for="description" .form-group>Description: </label><br>
     <textarea rows="4" cols="50" class="form-control" name="event[description]" id="description"></textarea>
   </div>
-    <div class='label'> indicates a required field</div>
+    <div class='.form-group'> <span class='star'>*</span>Indicates a Required Field</div>
   <input type="hidden" name="event[user]" id="author" value="<%= author_id %>">
   <input type="submit" value="Add" class="btn btn-lg btn-success">
 </form>
 <br>
 <a href="/calendar">To Calendar</a><br>
 <a href="/events">To Events List</a><br>
+</div>
 
 <% include ../partials/footer %>
 

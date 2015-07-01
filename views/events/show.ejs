@@ -1,7 +1,7 @@
 <%= include ../partials/header %>
+<div class='container'>
 <h1><%= event.title %></h1>
-
-<table cellspacing="10">
+<table class='table table-hover' style='background-color:white'>
 	<thead>
 		<tr>
 			<th>Name of Event</th>
@@ -25,7 +25,7 @@
  	     	<td><a href="/events/<%= event._id%>/edit">Edit</a></td>
  	     	<td>
  	     	  <form action='/events/<%= event._id %>?_method=DELETE' method="POST">
- 	     	    <input type="submit" value="X">
+ 	     	    <input type="submit" value="Delete" class="btn btn-danger">
  	     	  </form>
  	     	</td>
  	     </tr>
@@ -35,6 +35,6 @@
 <a href="/events/<%=event._id%>/edit">Edit this Event</a><br>
 <a href="/calendar">To Calendar</a><br>
 <a href="/events">To Events Listing</a><br>
-<br>
 <a href="/logout">Logout</a>
+</div>
 <% include ../partials/footer %>

@@ -8,6 +8,7 @@ var express = require('express'),
     request = require('request'),
     passport = require('passport'),
     util = require('util'),
+    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
     MeetupStrategy = require('passport-meetup').Strategy;
     db = require('./models');
     var findOrCreate = require('mongoose-findorcreate');
@@ -17,6 +18,8 @@ var express = require('express'),
 
 var MEETUP_KEY = 'psnnhjuq85ps4olm79uia7j908';
 var MEETUP_SECRET = 'e5gdob0s5ludcqn3f1ca7fon8p';
+var GOOGLE_CLIENT_ID = "TBHO6PEFECF7GV3BLP";
+var GOOGLE_CLIENT_SECRET = "ONWJJQULEQ7QPRSUXSSDXVVIKQYQ5G7NJFQCKODHM45UFFZB5T";
 
 
 app.set('view engine', 'ejs');
@@ -53,7 +56,7 @@ passport.use(new MeetupStrategy({
     consumerSecret: MEETUP_SECRET,
     callbackURL: "http://127.0.0.1:3000/auth/meetup/callback"
   },
-  function(token, tokenSecret, profile, done) {
+  // function(token, tokenSecret, profile, done) {
   //   db.User.findOrCreate({ meetupId: profile.id }, function (err, user) {
   //     console.log(user);
   //     return done(err, user);
@@ -69,11 +72,54 @@ passport.use(new MeetupStrategy({
     //   //var userId = profile._raw[1];
       theToken = token;
       theTokenSecret = tokenSecret;
-      console.log(profile);
+      //console.log(profile);
       return done(null, profile);
     });
   }
 ));
+
+
+
+passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://127.0.0.1:3000/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
+      
+      // To keep the example simple, the user's Google profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Google account with a user record in your database,
+      // and return that user instead.
+      return done(null, profile);
+    });
+  }
+));
+
+
+// passport.use('meetup', new MeetupStrategy({
+//     consumerKey: MEETUP_KEY,
+//     consumerSecret: MEETUP_SECRET,
+//     callbackURL: "http://127.0.0.1:3000/auth/meetup/callback"
+//   },
+//   function(token, tokenSecret, profile, done) {
+//     db.User.findOne({ domain: 'meetup.com', uid: profile.id }, function(err, account) {
+//       if (err) { return done(err); }
+//       if (account) { return done(null, account); }
+
+//       var account;
+//       account.domain = 'meetup.com';
+//       account.uid = profile.id;
+//       var t = { kind: 'oauth', token: token, attributes: { tokenSecret: tokenSecret } };
+//       account.tokens.push(t);
+//       console.log(account);
+//       return done(null, account);
+//     });
+//   }
+// ));
+
 
 
 //ROOT login to MY APP
@@ -107,6 +153,45 @@ passport.authenticate('meetup', { failureRedirect: '/meetup/login' }),
 function(req, res) {
   res.redirect('/calendar');
 });
+
+
+
+app.get('/auth/google',
+  passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+                                            'https://www.googleapis.com/auth/userinfo.email'] }),
+  function(req, res){
+    // The request will be redirected to Google for authentication, so this
+    // function will not be called.
+});
+
+
+app.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/calendar' }),
+  function(req, res) {
+    res.redirect('/calendar');
+  });
+
+
+
+
+app.get('/connect/meetup',
+  passport.authorize('meetup', { failureRedirect: '/calendar' })
+);
+
+app.get('/connect/meetup/callback',
+  passport.authorize('meetup', { failureRedirect: '/calendar' }),
+  function(req, res) {
+    var user = req.user;
+    var account = req.account;
+
+    // Associate the Twitter account with the logged-in user.
+    account.userId = user.id;
+    account.save(function(err) {
+      if (err) { return self.error(err); }
+      self.redirect('/');
+    });
+  }
+);
 
 
 app.get('/searchresults', ensureAuthenticated, function(req, res) {

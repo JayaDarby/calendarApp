@@ -18,6 +18,8 @@
     "morgan": "^1.6.0",
     "oauth": "^0.9.13",
     "passport": "^0.2.2",
+    "passport-eventbrite-oauth": "0.0.1",
+    "passport-google-oauth": "^0.2.0",
     "passport-meetup": "^0.1.2",
     "querystring": "^0.2.0",
     "request": "^2.58.0",
