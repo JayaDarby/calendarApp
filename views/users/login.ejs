@@ -1,19 +1,22 @@
-<% include ../partials/header %>
+<% include ../partials/headerUser %>
 
-
-<h1>Login</h1>
-<form method="POST" action="/login" >
+<div class='container' id='container'>
+<h1 id='white'>Login</h1>
+<form method="POST" action="/login" class="form-signin" >
   <div class="form-group">
-    <label for="email"> Email:     </label>
-      <input type="text" id="email" name="user[email]" class="form-control" autofocus>
+    <label for="email" class="sr-only white"> Email:     </label>
+      <input type="text" id="email" name="user[email]" class="form-control" required autofocus>
 
   </div>
   <div class="form-group">
-    <label for="pass"> Password:</label>
-      <input type="password" id="pass" name="user[password]" class="form-control">
+    <label for="pass" class="sr-only white"> Password:</label>
+      <input type="password" id="pass" name="user[password]" class="form-control" required>
 
   </div>
-  <input type="submit" value="Login" class="btn btn-primary">
+  <input type="submit" value="Login" class="btn btn-med btn-primary btn-block">
 </form>
 <a href="/signup">Don't have an account? Sign up here</a>
+</div>
 <% include ../partials/footer %>
+
+

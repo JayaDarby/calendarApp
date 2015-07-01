@@ -19,3 +19,13 @@
 *{
 	font-family: 'Vidaloka', serif;
 }
+
+body { 
+    background: url(./images/witewall_3_@2X.png) repeat 0 0;
+    background-size:cover;
+}
+
+
+a{
+  color:#1c94c4;
+}

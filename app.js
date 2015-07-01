@@ -10,6 +10,7 @@ var express = require('express'),
     util = require('util'),
     MeetupStrategy = require('passport-meetup').Strategy;
     db = require('./models');
+    var findOrCreate = require('mongoose-findorcreate');
     loginMiddleware = require("./middleware/login");
     routeMiddleware = require("./middleware/route");
 
@@ -46,20 +47,28 @@ passport.deserializeUser(function(obj, done) {
 });
 
 
+var theToken, theTokenSecret;
 passport.use(new MeetupStrategy({
     consumerKey: MEETUP_KEY,
     consumerSecret: MEETUP_SECRET,
     callbackURL: "http://127.0.0.1:3000/auth/meetup/callback"
   },
   function(token, tokenSecret, profile, done) {
-    // asynchronous verification, for effect...
+  //   db.User.findOrCreate({ meetupId: profile.id }, function (err, user) {
+  //     console.log(user);
+  //     return done(err, user);
+  // });
+  function(token, tokenSecret, profile, done) {
+    //asynchronous verification, for effect...
     process.nextTick(function () {
       
-      // To keep the example simple, the user's Meetup profile is returned to
-      // represent the logged-in user.  In a typical application, you would want
-      // to associate the Meetup account with a user record in your database,
-      // and return that user instead.
-      //var userId = profile._raw[1];
+    //   // To keep the example simple, the user's Meetup profile is returned to
+    //   // represent the logged-in user.  In a typical application, you would want
+    //   // to associate the Meetup account with a user record in your database,
+    //   // and return that user instead.
+    //   //var userId = profile._raw[1];
+      theToken = token;
+      theTokenSecret = tokenSecret;
       console.log(profile);
       return done(null, profile);
     });
@@ -101,7 +110,7 @@ function(req, res) {
 
 
 app.get('/searchresults', ensureAuthenticated, function(req, res) {
-  var url = 'https://api.meetup.com/2/events?&sign=true&photo-host=public&rsvp=yes&member_id=86247062&page=20';
+  var url = 'https://api.meetup.com/2/events?access_token={106e22471225a592b2d645054136}&sign=true&photo-host=public&rsvp=yes&member_id=86247062&page=20';
   request.get(url, function(error, response, body) {
     console.log(response.statusCode);
     if (error) {

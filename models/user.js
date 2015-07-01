@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var findOrCreate = require('mongoose-findorcreate');
 var bcrypt = require('bcrypt');
 var SALT_FACTOR = 10;
 
@@ -15,13 +16,16 @@ var userSchema = new mongoose.Schema({
 		type:String,
 		required:true
 	},
+  meetupId:{
+    type:Number
+  },
   events:[{
     type:mongoose.Schema.Types.ObjectId,
     ref: 'Event'
   }]
 });
 
-
+userSchema.plugin(findOrCreate);
 
 userSchema.pre('save', function(next){
 

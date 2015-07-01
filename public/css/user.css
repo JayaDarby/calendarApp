@@ -1,0 +1,46 @@
+#white {
+  color:#ffffff;
+  font-family: 'Vidaloka', serif;
+}
+
+.label:before{
+     content:"*" ;
+     color:red   
+     }
+
+
+.button {
+  font: bold 11px Arial;
+  text-decoration: none;
+  background-color: #EEEEEE;
+  color: #333333;
+  padding: 2px 6px 2px 6px;
+  border-top: 1px solid #CCCCCC;
+  border-right: 1px solid #333333;
+  border-bottom: 1px solid #333333;
+  border-left: 1px solid #CCCCCC;
+}
+
+* {
+	font-family: 'Vidaloka', serif;
+}
+
+body { 
+    background: url(./images/people-apple-iphone-writing.jpg) repeat 0 0;
+    background-size:cover;
+}
+
+
+a {
+  color:#1c94c4;
+  font-size: 20px;
+}
+
+.larger {
+  font-size: 30px;
+}
+
+#container {
+  width: 500px;
+}
+
