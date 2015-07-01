@@ -59,6 +59,8 @@ passport.use(new MeetupStrategy({
       // represent the logged-in user.  In a typical application, you would want
       // to associate the Meetup account with a user record in your database,
       // and return that user instead.
+      //var userId = profile._raw[1];
+      console.log(profile);
       return done(null, profile);
     });
   }
@@ -72,7 +74,7 @@ app.get('/', function(req,res){
 });
 
 
-app.get('/account', function(req, res){
+app.get('/account', ensureAuthenticated, function(req, res){
   res.render('meetup/account', { user: req.user });
 });
 
@@ -86,9 +88,9 @@ app.get('/auth/meetup',
   passport.authenticate('meetup'),
   function(req, res){
     // The request will be redirected to Meetup for authentication, so this
-    // function will not be called.
+    res.redirect('/calendar');
 });
-
+//106e22471225a592b2d645054136
 
 
 app.get('/auth/meetup/callback', 
@@ -98,10 +100,10 @@ function(req, res) {
 });
 
 
-app.get('/searchresults', function(req, res) {
-  var url = 'https://api.meetup.com/2/events?key=ABDE12456AB2324445&group_urlname=ny-tech&sign=true';
-  console.log(url);
+app.get('/searchresults', ensureAuthenticated, function(req, res) {
+  var url = 'https://api.meetup.com/2/events?&sign=true&photo-host=public&rsvp=yes&member_id=86247062&page=20';
   request.get(url, function(error, response, body) {
+    console.log(response.statusCode);
     if (error) {
       console.log('error!');
     } else if (!error && response.statusCode != 200) {
